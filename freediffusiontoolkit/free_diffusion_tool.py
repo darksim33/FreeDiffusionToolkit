@@ -112,27 +112,30 @@ class FreeDiffusionTool:
                 filename = filename.name
 
             description = kwargs.get(
-                "description", "External vector file for SBBDiffusion"
+                "description", "Vector file for Siemens 'free' diffusion mode."
             )
             coordinate_system = kwargs.get("CoordinateSystem", "xyz")
             normalisation = kwargs.get("Normalisation", "maximum")
-            comment = kwargs.get("Comment", "my diffusion vector set")
+            # comment = kwargs.get("Comment", "my diffusion vector set")
 
+            # head.append(
+            #     r"# -----------------------------------------------------------------------------"
+            # )
+            # head.append(r"# Copyright (C) SIEMENS AG 2011 All Rights Reserved.\ ")
             head.append(
                 r"# -----------------------------------------------------------------------------"
             )
-            head.append(r"# Copyright (C) SIEMENS AG 2011 All Rights Reserved.\ ")
+            # head.append(r"# ")
+            # head.append(r"# Project: NUMARIS/4")
             head.append(
-                r"# -----------------------------------------------------------------------------"
-            )
-            head.append(r"# ")
-            head.append(r"# Project: NUMARIS/4")
-            head.append(
-                f"# File: c:\\Medcom\\MriCustomer\\seq\\DiffusionVectorSets\\{filename}"
+                f"# File: C:\\Medcom\\MriCustomer\\seq\\DiffusionVectorSets\\{filename}"
             )
             head.append(f"# Date: {current_time}")
-            head.append("#")
-            head.append(f"# Descrip: {description}")
+            # head.append("#")
+            head.append(f"# Description: {description}")
+            if kwargs.get("b_values", None) is not None:
+                head.append(f"b_values: {b_values}")
+
             head.append(
                 r"# -----------------------------------------------------------------------------"
             )
@@ -140,11 +143,11 @@ class FreeDiffusionTool:
             head.append(f"CoordinateSystem = {coordinate_system}")
             head.append(f"Normalisation = {normalisation}")
 
-            if kwargs.get("b_values", None) is not None:
-                b_values = kwargs.get("b_values")
-                head.append(f"Comment = {comment}; b_values: {b_values}")
-            else:
-                head.append(f"Comment = {comment}")
+            # if kwargs.get("b_values", None) is not None:
+            #     b_values = kwargs.get("b_values")
+            #     head.append(f"Comment = {comment}; b_values: {b_values}")
+            # else:
+            #     head.append(f"Comment = {comment}")
             return head
 
         def vector_to_string(
