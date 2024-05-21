@@ -3,6 +3,7 @@ import random
 import numpy as np
 from pathlib import Path
 from freediffusiontoolkit import FreeDiffusionTool
+from freediffusiontoolkit.free_diffusion_tool import run
 
 
 @pytest.fixture
@@ -33,3 +34,15 @@ def test_get_vectors(free_diffusion_tool):
 def test_save_file_siemens_ve11c(free_diffusion_tool, vector_file_siemens):
     free_diffusion_tool.save(vector_file_siemens)
     assert vector_file_siemens.is_file()
+
+
+def test_terminal_help(capsys):
+    run(["-h"])
+    captured = capsys.readouterr()
+    assert "Usage:" in captured.out
+
+
+def test_terminal_run():
+    run(["run", "0,100", "6", "Siemens_VE11c", "test.dvs"])
+    assert Path(r"test.dvs").is_file()
+    Path(r"test.dvs").unlink()

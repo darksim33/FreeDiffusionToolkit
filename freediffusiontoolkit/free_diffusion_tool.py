@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 from pathlib import Path
 from datetime import datetime
@@ -173,7 +175,46 @@ class FreeDiffusionTool:
                 file.write(vector_to_string(row_idx, row))
 
 
-def run(b_values: list, n_dims: int, vendor: str, filename: str | Path, **options):
+def run(
+    args: list = None,
+    # b_values: list = None,
+    # n_dims: int = None,
+    # vendor: str = None,
+    # filename: str | Path = None,
+    # **options,
+):
     """Handles script execution for extern usage. Options are explained in vendor method documentation."""
+    if args is None:
+        args = sys.argv
+
+    opts = [opt for opt in args if opt.startswith("-")]
+    args = [arg for arg in args if not arg.startswith("-")]
+
+    if "-h" in opts or "--help" in opts:
+        print(
+            "\n"
+            "FreeDiffusionToolkit for diffusion vector file creation.\n"
+            "Usage:\n"
+            "  create_vector_file <b_values> <n_dims> <vendor> <filename> [options]\n>"
+            "\n"
+            "Parameters:\n"
+            "   b_values: list              Values used for scaling the directions.\n"
+            "                               Example: '0,5,10' Passed as string without brackets.\n"
+            "   n_dims: int                 Number of dimensions used.\n"
+            "   vendor: str                 Specifying the selected Vendor. For more information see documentation.\n"
+            "   filename: str               Output filename with ending.\n\n"
+            "General Options:\n"
+            "   -h, --help                  Show help.\n"
+        )
+        return
+
+    if len(args) < 4:
+        TypeError("Not enough input arguments.")
+
+    b_values = [int(val) for val in args[1].replace(",", " ").split()]
+    n_dims = int(args[2])
+    vendor = args[3]
+    filename = Path(args[4])
+
     free_diffusion_tool = FreeDiffusionTool(b_values, n_dims, vendor)
-    free_diffusion_tool.save(filename, **options)
+    free_diffusion_tool.save(filename)
