@@ -20,6 +20,9 @@ pytest = "^8.2.1"
 black = "^24.4.2"
 #pytest-order = "^1.2.1"
 
+[tool.poetry.scripts]
+create_vector_file = "freediffusiontoolkit.free_diffusion_tool:run"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
