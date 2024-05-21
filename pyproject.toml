@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "freediffusiontoolkit"
+version = "0.1.0"
+description = "Toolkit for creation and processing of diffusion vector files for MR application."
+authors = ["darksim33 <57491748+darksim33@users.noreply.github.com>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+numpy = "^1.26.4"
+pathlib = "^1.0.1"
+nibabel = "^5.2.1"
+pandas = "^2.2.2"
+pillow = "^10.3.0"
+matplotlib = "^3.9.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.1"
+black = "^24.4.2"
+pytest-order = "^1.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
