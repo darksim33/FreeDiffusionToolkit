@@ -17,7 +17,7 @@ class FreeDiffusionTool:
         self.n_dims = n_dims
 
         self.supported_vendors = [
-            "Siemens_VE11c",
+            "Siemens",
         ]
 
         self.vendor = vendor
@@ -67,12 +67,16 @@ class FreeDiffusionTool:
 
     def save(self, diffusion_vector_file: Path, **kwargs: dict) -> None:
         """Handles saving the diffusion vector file for different vendors."""
-        if self.vendor == "Siemens_VE11c":
-            self.write_siemens_ve11c(diffusion_vector_file, **kwargs)
+        if self.vendor in ["Siemens", "siemens"]:
+            self.write_siemens(diffusion_vector_file, **kwargs)
 
-    def write_siemens_ve11c(self, diffusion_vector_file: Path, **options: dict) -> None:
+    def write_siemens(self, diffusion_vector_file: Path = "", **options: dict) -> None:
         """
-        Write vector file for Siemens_VE11c.
+        Write vector file for Siemens.
+
+        Supports VB17c and VE11c but might support other software version.
+        Recommended file suffix for VE11 is .dvs
+        For VB17c the filename should be DiffusionVectors.txt
 
         Parameters
         diffusion_vector_file: Path
@@ -213,6 +217,8 @@ def run(
 
     if len(args) < 4:
         TypeError("Not enough input arguments.")
+    elif len(args) < 5:
+        args.append((Path.home().resolve() / "DiffusionVectors.txt").__str__())
 
     b_values = [int(val) for val in args[1].replace(",", " ").split()]
     n_dims = int(args[2])

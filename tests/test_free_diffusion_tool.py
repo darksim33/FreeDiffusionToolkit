@@ -18,7 +18,7 @@ def free_diffusion_tool():
     return FreeDiffusionTool(
         np.linspace(0, random.randint(750, 1500), random.randint(20, 64)),
         random.randint(1, 15),
-        "Siemens_VE11c",
+        "Siemens",
     )
 
 
@@ -43,6 +43,6 @@ def test_terminal_help(capsys):
 
 
 def test_terminal_run():
-    run(["run", "0,100", "6", "Siemens_VE11c", "test.dvs"])
+    run(["run", "0,100", "6", "Siemens", "test.dvs"])
     assert Path(r"test.dvs").is_file()
     Path(r"test.dvs").unlink()
