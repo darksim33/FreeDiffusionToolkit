@@ -13,9 +13,9 @@ class BasicSiemensTool(FreeDiffusionTool):
         n_dims: int | None = 3,
         **kwargs,
     ):
-        super().__init__(b_values, n_dims,**kwargs)
+        super().__init__(b_values, n_dims, **kwargs)
 
-    def construct_header(self, filename: Path=None, n_dims:int=3) -> list:
+    def construct_header(self, filename: Path = None, n_dims: int = 3) -> list:
         """
         Create a header string for the diffusion vector file.
 
@@ -75,12 +75,11 @@ class BasicSiemensTool(FreeDiffusionTool):
         """
         Write vector file for Siemens.
 
-        Supports VB17c and VE11c but might support other software version.
-        Recommended file suffix for VE11 is .dvs
-        For VB17c the filename should be DiffusionVectors.txt
+        Supports VE11c but might support other software version.
+        Recommended file suffix is .dvs
 
         Parameters
-        diffusion_vector_file: Path
+        filename: Path
             Pathlib Path to the diffusion vector file.
 
         options: dict
@@ -96,7 +95,7 @@ class BasicSiemensTool(FreeDiffusionTool):
                 Newline: str = "\n", "\r\n" for legacy
 
         """
-        header = construct_header(filename=diffusion_vector_file)
+        header = self.construct_header(filename=filename)
 
         # get diffusion values
         diffusion_vectors = self.get_diffusion_vectors()
@@ -114,7 +113,8 @@ class BasicSiemensTool(FreeDiffusionTool):
             # write values to file
             for row_idx, row in enumerate(diffusion_vectors):
                 file.write(
-                    vector_to_string(row_idx, row) + self.options.get("newline", "\n")
+                    self.vector_to_string(row_idx, row)
+                    + self.options.get("newline", "\n")
                 )
 
     @staticmethod
@@ -131,14 +131,12 @@ class BasicSiemensTool(FreeDiffusionTool):
 
 
 class LegacySiemensTool(BasicSiemensTool):
-    def __init__(
-        self, b_values: list, n_dims: int, vendor: str | None = None, **kwargs
-    ):
-        super().__init__(self, b_values, n_dims, vendor, **kwargs)
+    def __init__(self, b_values: list | np.ndarray, n_dims: int, **kwargs):
+        super().__init__(b_values, n_dims, **kwargs)
         self.options["newline"] = "\r\n"
         self.options["default_path"] = r"C:\\Medcom\\MriCustomer\\seq\\"
 
-    def save(self, filename: Path = "", **options: dict):
+    def save(self, filename: Path = Path("DiffusionVectors.txt"), **options: dict):
         """
         Write vector file for Siemens (legacy).
 
@@ -146,7 +144,7 @@ class LegacySiemensTool(BasicSiemensTool):
         Filename should be DiffusionVectors.txt since this is the supported filename.
 
         Parameters
-        diffusion_vector_file: Path
+        filename: Path
             Pathlib Path to the diffusion vector file.
 
         options: dict
@@ -162,7 +160,7 @@ class LegacySiemensTool(BasicSiemensTool):
                 Newline: str = "\r\n" for legacy
 
         """
-        header = construct_header(filename=diffusion_vector_file)
+        header = self.construct_header(filename=filename)
         for idx, head in enumerate(header):
             if head.startswith("[directions="):
                 header[idx] = head.replace("[directions=", "")
