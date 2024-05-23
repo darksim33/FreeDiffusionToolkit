@@ -1,8 +1,6 @@
-import sys
 from abc import abstractmethod
 import numpy as np
 from pathlib import Path
-from datetime import datetime
 
 
 class FreeDiffusionTool:
@@ -10,27 +8,11 @@ class FreeDiffusionTool:
         self,
         b_values: list | np.ndarray = np.array([0, 1000]),
         n_dims: int | None = 3,
-        vendor: str | None = None,
         **kwargs,
     ):
         self.options = kwargs
         self.b_values = b_values
         self.n_dims = n_dims
-
-        self.vendor = vendor
-
-    # @property
-    # def vendor(self):
-    #     """Handles different supported vendors."""
-    #     return self._vendor
-    #
-    # @vendor.setter
-    # def vendor(self, vendor):
-    #     if vendor not in self.supported_vendors:
-    #         raise ValueError(
-    #             "The selected vendor is not supported. Check documentation for supported ones."
-    #         )
-    #     self._vendor = vendor
 
     def get_diffusion_vectors(self) -> np.ndarray:
         """Calculate the diffusion vectors for the given number of dimensions and b_values."""

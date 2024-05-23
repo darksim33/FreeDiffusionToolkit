@@ -3,7 +3,7 @@ import random
 import numpy as np
 from pathlib import Path
 from freediffusiontoolkit import FreeDiffusionTool
-from freediffusiontoolkit.free_diffusion_tool import run
+from freediffusiontoolkit.free_diffusion_tools import run
 
 
 @pytest.fixture

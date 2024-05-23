@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-
+from .simens_tools import LegacySiemensTool, BasicSiemensTool
 
 def run(
     args: list = None,
@@ -40,5 +40,19 @@ def run(
     vendor = args[3]
     filename = Path(args[4])
 
-    free_diffusion_tool = FreeDiffusionTool(b_values, n_dims, vendor)
+    # free_diffusion_tool = FreeDiffusionTool(b_values, n_dims, vendor)
+    free_diffusion_tool = vendor_handler(vendor, b_values, n_dims)
     free_diffusion_tool.save(filename)
+
+
+def vendor_handler(vendor: str, b_values: list, n_dims: int):
+    if "Siemens" or "siemens" in vendor:
+        if "VB11" in vendor:
+            free_diffusion_tool = LegacySiemensTool(b_values, n_dims)
+        else:
+            free_diffusion_tool = BasicSiemensTool(b_values, n_dims)
+    else:
+        raise ValueError(
+                "The selected vendor is not supported. Check documentation for supported ones."
+            )
+    return free_diffusion_tool

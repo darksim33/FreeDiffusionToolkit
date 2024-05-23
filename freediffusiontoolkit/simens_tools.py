@@ -1,8 +1,9 @@
-from pathlib import Path
-
+import sys
 import numpy as np
+from pathlib import Path
+from datetime import datetime
 
-from .free_diffusion_tool import FreeDiffusionTool
+from .free_diffusion_tools import FreeDiffusionTool
 
 
 class BasicSiemensTool(FreeDiffusionTool):
@@ -10,12 +11,11 @@ class BasicSiemensTool(FreeDiffusionTool):
         self,
         b_values: list | np.ndarray = np.array([0, 1000]),
         n_dims: int | None = 3,
-        vendor: str | None = None,
         **kwargs,
     ):
-        super().__init__(b_values, n_dims, vendor, **kwargs)
+        super().__init__(b_values, n_dims,**kwargs)
 
-    def construct_header(self, filename: Path) -> list:
+    def construct_header(self, filename: Path=None, n_dims:int=3) -> list:
         """
         Create a header string for the diffusion vector file.
 
@@ -30,9 +30,13 @@ class BasicSiemensTool(FreeDiffusionTool):
         head.append(
             r"# -----------------------------------------------------------------------------"
         )
-        filename = self.options.get("filename", "MyVectorSet.dvs")
-        if isinstance(filename, Path):
+
+        if filename is not None:
+            if not isinstance(filename, Path):
+                filename = Path(filename)
             filename = filename.name
+        else:
+            filename = "MyVectorSet.dvs"
         default_path = self.options.get(
             "default_path", r"C:\\Medcom\\MriCustomer\\seq\\DiffusionVectorSets\\"
         )
@@ -47,6 +51,7 @@ class BasicSiemensTool(FreeDiffusionTool):
         )
         head.append(f"# Description: {description}")
         if self.options.get("b_values", None) is not None:
+            b_values = self.options["b_values"]
             head.append(f"b_values: {b_values}")
 
         comment = self.options.get("Comment", None)
