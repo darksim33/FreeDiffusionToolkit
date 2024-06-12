@@ -1,7 +1,7 @@
-import sys
-import numpy as np
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
+import numpy as np
 
 from .free_diffusion_tools import FreeDiffusionTool
 
@@ -13,20 +13,28 @@ class BasicSiemensTool(FreeDiffusionTool):
         n_dims: int | None = 3,
         **kwargs,
     ):
-        super().__init__(b_values, n_dims,**kwargs)
+        super().__init__(b_values, n_dims, **kwargs)
 
-    def construct_header(self, filename: Path=None, n_dims:int=3) -> list:
+    def construct_header(
+        self, filename: Path = None,
+        n_dims: int = 3,
+        b_values: list | np.ndarray | tuple = (0, 1000),
+    ) -> list:
         """
         Create a header string for the diffusion vector file.
 
         Parameters
         n_dims: int
             Number of diffusion vector directions.
+        b_values: list | np.ndarray
+            An array containing the b values used for the diffusion vector file.
         kwargs: dict
             Options are explained in parent method documentation.
         """
-        head = list()
+        # This is the total number of applied dimensions
+        n_directions = len(b_values) * n_dims
 
+        head = list()
         head.append(
             r"# -----------------------------------------------------------------------------"
         )
@@ -50,10 +58,8 @@ class BasicSiemensTool(FreeDiffusionTool):
             "description", "Vector file for Siemens 'free' diffusion mode."
         )
         head.append(f"# Description: {description}")
-        if self.options.get("b_values", None) is not None:
-            b_values = self.options["b_values"]
-            head.append(f"b_values: {b_values}")
-
+        head.append(f"b-values: {b_values}")
+        head.append(f"number dimensions: {n_dims}")
         comment = self.options.get("Comment", None)
         if comment:
             head.append(f"Comment: {comment}")
@@ -61,7 +67,7 @@ class BasicSiemensTool(FreeDiffusionTool):
         head.append(
             r"# -----------------------------------------------------------------------------"
         )
-        head.append(f"[directions={n_dims}]")
+        head.append(f"[directions={n_directions}]")
 
         coordinate_system = self.options.get("CoordinateSystem", "xyz")
         head.append(f"CoordinateSystem = {coordinate_system}")
@@ -96,7 +102,7 @@ class BasicSiemensTool(FreeDiffusionTool):
                 Newline: str = "\n", "\r\n" for legacy
 
         """
-        header = construct_header(filename=diffusion_vector_file)
+        header = self.construct_header(filename=filename)
 
         # get diffusion values
         diffusion_vectors = self.get_diffusion_vectors()
@@ -114,7 +120,7 @@ class BasicSiemensTool(FreeDiffusionTool):
             # write values to file
             for row_idx, row in enumerate(diffusion_vectors):
                 file.write(
-                    vector_to_string(row_idx, row) + self.options.get("newline", "\n")
+                    self.vector_to_string(row_idx, row) + self.options.get("newline", "\n")
                 )
 
     @staticmethod
@@ -162,7 +168,7 @@ class LegacySiemensTool(BasicSiemensTool):
                 Newline: str = "\r\n" for legacy
 
         """
-        header = construct_header(filename=diffusion_vector_file)
+        header = self.construct_header(filename=filename)
         for idx, head in enumerate(header):
             if head.startswith("[directions="):
                 header[idx] = head.replace("[directions=", "")
