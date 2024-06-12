@@ -21,7 +21,7 @@ black = "^24.4.2"
 #pytest-order = "^1.2.1"
 
 [tool.poetry.scripts]
-create_vector_file = "freediffusiontoolkit.free_diffusion_tool:run"
+create_vector_file = "freediffusiontoolkit.cmd_interface:run"
 
 [build-system]
 requires = ["poetry-core"]
