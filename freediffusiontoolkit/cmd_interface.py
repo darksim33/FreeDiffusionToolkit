@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
-from .simens_tools import LegacySiemensTool, BasicSiemensTool
+from .siemens_tools import LegacySiemensTool, BasicSiemensTool
+
 
 def run(
     args: list = None,
@@ -53,6 +54,6 @@ def vendor_handler(vendor: str, b_values: list, n_dims: int):
             free_diffusion_tool = BasicSiemensTool(b_values, n_dims)
     else:
         raise ValueError(
-                "The selected vendor is not supported. Check documentation for supported ones."
-            )
+            "The selected vendor is not supported. Check documentation for supported ones."
+        )
     return free_diffusion_tool
