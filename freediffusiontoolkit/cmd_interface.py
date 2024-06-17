@@ -18,7 +18,7 @@ def run(
             "\n"
             "FreeDiffusionToolkit for diffusion vector file creation.\n"
             "Usage:\n"
-            "  create_vector_file <b_values> <n_dims> <vendor> <filename> [options]\n>"
+            "  create_vector_file <b_values> <n_dims> <vendor> <filename> [options]\n"
             "\n"
             "Parameters:\n"
             "   b_values: list              Values used for scaling the directions.\n"
