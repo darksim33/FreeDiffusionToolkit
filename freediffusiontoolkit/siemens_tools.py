@@ -129,6 +129,33 @@ class BasicSiemensTool(FreeDiffusionTool):
             f"{vector[2]: .{decimals}f})"
         )
 
+    def load(self, filename: Path) -> None:
+        vector_list = list()
+
+        def process_vector_line(text: str) -> tuple:
+            text = text.strip()
+            components = text.split(" = ")
+            position = components[0].replace("Vector[", "").replace("]", "")
+            vector = (
+                components[1]
+                .replace("(", "")
+                .replace(")", "")
+                .replace(" ", "")
+                .split(",")
+            )
+            vector = [np.float64(i) for i in vector]
+            return position, vector
+
+        with filename.open("r") as file:
+            for line in file:
+
+                # Read data
+                if not line.startswith("#"):
+                    if line.startswith("Vector"):
+                        vector_list.append(process_vector_line(line)[1])
+
+        self.vectors = np.array(vector_list)
+
 
 class LegacySiemensTool(BasicSiemensTool):
     def __init__(self, b_values: list | np.ndarray, n_dims: int, **kwargs):
@@ -165,6 +192,4 @@ class LegacySiemensTool(BasicSiemensTool):
             if head.startswith("[directions="):
                 header[idx] = head.replace("[directions=", "")
 
-        diffusion_vectors = self.get_diffusion_vectors()
-
-        self.write(filename, header, diffusion_vectors)
+        self.write(filename, header, self.vectors)
