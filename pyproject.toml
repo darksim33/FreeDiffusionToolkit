@@ -13,7 +13,7 @@ pathlib = "^1.0.1"
 #nibabel = "^5.2.1"
 #pandas = "^2.2.2"
 #pillow = "^10.3.0"
-#matplotlib = "^3.9.0"
+matplotlib = "^3.9.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"

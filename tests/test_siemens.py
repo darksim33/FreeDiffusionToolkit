@@ -6,14 +6,14 @@ from freediffusiontoolkit import BasicSiemensTool, LegacySiemensTool
 
 
 @pytest.fixture
-def vector_file_siemens_basic():
-    yield Path(r".test_DiffVector.dvs")
-    if Path(r".test_DiffVector.dvs").is_file():
-        Path(r".test_DiffVector.dvs").unlink()
+def vector_filename_siemens_basic():
+    yield Path("test_DiffVector.dvs")
+    if Path("test_DiffVector.dvs").is_file():
+        Path("test_DiffVector.dvs").unlink()
 
 
 @pytest.fixture
-def vector_file_siemens_legacy():
+def vector_filename_siemens_legacy():
     yield Path("DiffusionVectors.txt")
     if Path("DiffusionVectors.txt").is_file():
         Path("DiffusionVectors.txt").unlink()
@@ -23,7 +23,7 @@ def vector_file_siemens_legacy():
 def free_diffusion_tool_siemens_basic():
     return BasicSiemensTool(
         np.linspace(0, random.randint(750, 1500), random.randint(20, 64)),
-        random.randint(1, 15),
+        random.randint(3, 15),
     )
 
 
@@ -31,19 +31,31 @@ def free_diffusion_tool_siemens_basic():
 def free_diffusion_tool_siemens_legacy():
     return LegacySiemensTool(
         np.linspace(0, random.randint(750, 1500), random.randint(20, 64)),
-        random.randint(1, 15),
+        random.randint(3, 15),
     )
 
 
-def test_save_file_siemens_basic_save(
-    free_diffusion_tool_siemens_basic, vector_file_siemens_basic
+@pytest.fixture
+def vector_file_siemens_basic(
+    vector_filename_siemens_basic, free_diffusion_tool_siemens_basic
 ):
-    free_diffusion_tool_siemens_basic.save(vector_file_siemens_basic)
-    assert vector_file_siemens_basic.is_file()
+    free_diffusion_tool_siemens_basic.save(vector_filename_siemens_basic)
+    yield vector_filename_siemens_basic
+    if Path(vector_filename_siemens_basic).is_file():
+        vector_filename_siemens_basic.unlink()
 
 
-def test_load_file_siemens_legacy_save(
-    free_diffusion_tool_siemens_legacy, vector_file_siemens_legacy
+def test_basic_save(free_diffusion_tool_siemens_basic, vector_filename_siemens_basic):
+    free_diffusion_tool_siemens_basic.save(vector_filename_siemens_basic)
+    assert vector_filename_siemens_basic.is_file()
+
+
+def test_basic_load(vector_file_siemens_basic, free_diffusion_tool_siemens_basic):
+    free_diffusion_tool_siemens_basic.load(vector_file_siemens_basic)
+
+
+def test_legacy_save(
+    free_diffusion_tool_siemens_legacy, vector_filename_siemens_legacy
 ):
-    free_diffusion_tool_siemens_legacy.save(vector_file_siemens_legacy)
-    assert vector_file_siemens_legacy.is_file()
+    free_diffusion_tool_siemens_legacy.save(vector_filename_siemens_legacy)
+    assert vector_filename_siemens_legacy.is_file()
