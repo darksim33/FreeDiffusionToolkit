@@ -20,7 +20,7 @@ def plot_vectors(vectors: np.array, show_inverted: bool = False):
         v = np.concatenate((np.squeeze(vectors[:, 1]), np.squeeze(vectors[:, 1]) * -1))
         w = np.concatenate((np.squeeze(vectors[:, 2]), np.squeeze(vectors[:, 2]) * -1))
         color = ["C0"] * vectors.shape[0] + ["C1"] * vectors.shape[0]
-    ax.quiver(x, y, z, u, v, w, color=color)
+    ax.quiver(x, y, z, u, v, w, color=color, linewidth=1)
 
     ax.set_xlim([-1, 1])
     ax.set_ylim([-1, 1])
