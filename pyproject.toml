@@ -21,8 +21,10 @@ black = "^24.4.2"
 #pytest-order = "^1.2.1"
 
 [tool.poetry.scripts]
-create_vector_file = "freediffusiontoolkit.cmd_interface:run"
+create_vector_file = "freediffusiontoolkit.cli:run"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+# TODO: poetry add git+https://github.com/ecaruyer/qspace.git; poetry add scipy
