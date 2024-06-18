@@ -29,7 +29,7 @@ def test_get_vectors(free_diffusion_tool):
 def test_get_vectors_3dims():
     diff_tool = FreeDiffusionTool([0, 500, 1000], 3)
     vectors = diff_tool.get_diffusion_vectors()
-    assert vectors.shape == (diff_tools.b_values * diff_tool.n_dims, 3)
+    assert vectors.shape == (len(diff_tool.b_values) * diff_tool.n_dims, 3)
     compare_vectors(
         vectors[diff_tool.n_dims : 2 * diff_tool.n_dims, :],
         vectors[diff_tool.n_dims * 2 :, :],

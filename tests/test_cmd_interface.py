@@ -1,5 +1,5 @@
 import pytest
-from freediffusiontoolkit.cmd_interface import run
+from freediffusiontoolkit.cli import run
 from pathlib import Path
 
 
