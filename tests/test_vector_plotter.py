@@ -31,6 +31,13 @@ def test_vector_plotter_n_dims_6():
     assert True
 
 
+def test_vector_plotter_n_dims_7():
+    diff_tool = FreeDiffusionTool([1000], 7)
+    vectors = diff_tool.get_diffusion_vectors()
+    plot_vectors(vectors, True)
+    assert True
+
+
 def test_vector_plotter_multi_b():
     diff_tool = FreeDiffusionTool([0, 500, 1000], 4)
     vectors = diff_tool.get_diffusion_vectors()

@@ -61,7 +61,7 @@ class FreeDiffusionTool:
 
             pass
 
-        elif self.n_dims > 7:
+        elif self.n_dims >= 7:
             # get equally spaced vectors
             phi = np.linspace(0, 2 * np.pi, self.n_dims)
             theta = np.linspace(0, np.pi / 2, self.n_dims)
