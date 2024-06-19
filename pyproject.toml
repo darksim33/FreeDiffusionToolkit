@@ -14,6 +14,8 @@ pathlib = "^1.0.1"
 #pandas = "^2.2.2"
 #pillow = "^10.3.0"
 matplotlib = "^3.9.0"
+qspace = { git = "https://github.com/ecaruyer/qspace.git" }
+scipy = "^1.13.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"
@@ -26,5 +28,3 @@ create_vector_file = "freediffusiontoolkit.cli:run"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-# TODO: poetry add git+https://github.com/ecaruyer/qspace.git; poetry add scipy
