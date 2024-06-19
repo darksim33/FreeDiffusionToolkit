@@ -1,5 +1,6 @@
-from freediffusiontoolkit.cli import run
 from pathlib import Path
+
+from freediffusiontoolkit.cli import run
 
 
 def test_cmd_help(capsys):
