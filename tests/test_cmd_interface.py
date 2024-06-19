@@ -1,4 +1,3 @@
-import pytest
 from freediffusiontoolkit.cli import run
 from pathlib import Path
 

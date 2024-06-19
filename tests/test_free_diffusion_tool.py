@@ -1,7 +1,8 @@
-import pytest
 import random
+
 import numpy as np
-from pathlib import Path
+import pytest
+
 from freediffusiontoolkit import FreeDiffusionTool
 
 
@@ -23,7 +24,7 @@ def test_get_vectors(free_diffusion_tool):
         free_diffusion_tool.n_dims * len(free_diffusion_tool.b_values),
         3,
     )
-    assert np.mean(vectors[0 : free_diffusion_tool.n_dims, :]) == 0
+    assert np.mean(vectors[0: free_diffusion_tool.n_dims, :]) == 0
 
 
 def test_get_vectors_3dims():
@@ -31,8 +32,8 @@ def test_get_vectors_3dims():
     vectors = diff_tool.get_diffusion_vectors()
     assert vectors.shape == (len(diff_tool.b_values) * diff_tool.n_dims, 3)
     compare_vectors(
-        vectors[diff_tool.n_dims : 2 * diff_tool.n_dims, :],
-        vectors[diff_tool.n_dims * 2 :, :],
+        vectors[diff_tool.n_dims: 2 * diff_tool.n_dims, :],
+        vectors[diff_tool.n_dims * 2:, :],
         diff_tool.b_values[-2] / diff_tool.b_values[-1],
     )
 
@@ -42,7 +43,7 @@ def test_get_vector_4dims():
     vectors = diff_tool.get_diffusion_vectors()
     assert vectors.shape == (len(diff_tool.b_values) * diff_tool.n_dims, 3)
     compare_vectors(
-        vectors[diff_tool.n_dims : 2 * diff_tool.n_dims, :],
-        vectors[diff_tool.n_dims * 2 :, :],
+        vectors[diff_tool.n_dims: 2 * diff_tool.n_dims, :],
+        vectors[diff_tool.n_dims * 2:, :],
         diff_tool.b_values[-2] / diff_tool.b_values[-1],
     )
