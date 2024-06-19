@@ -1,6 +1,7 @@
 from abc import abstractmethod
-import numpy as np
 from pathlib import Path
+
+import numpy as np
 from qspace.sampling import multishell as ms
 
 
@@ -32,7 +33,7 @@ class FreeDiffusionTool:
         points_per_shell = [self.n_dims]
         # Groups of shells and coupling weights
         shell_groups = [[i] for i in range(nb_shells)]
-        shell_groups.append(range(nb_shells))  # range(nb_shells)
+        shell_groups.append(list(range(nb_shells)))  # range(nb_shells)
         alphas = np.ones(len(shell_groups))
         weights = ms.compute_weights(nb_shells, points_per_shell, shell_groups, alphas)
 
