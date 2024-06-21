@@ -15,8 +15,36 @@ class BasicSiemensTool(FreeDiffusionTool):
     ):
         super().__init__(b_values, n_dims, **kwargs)
 
+    def get_basis_vectors(self) -> np.ndarray:
+        if self.n_dims == 3:
+            points = np.eye(3)
+        elif self.n_dims == 4:
+            points = np.array(
+                [
+                    [1, 1, 1],
+                    [-1, -1, 1],
+                    [-1, 1, -1],
+                    [1, -1, -1],
+                ]
+            ) / np.sqrt(3)
+        elif self.n_dims == 6:
+            points = np.array(
+                [
+                    [-0.7070447104249349, 0.6931899200454785, -0.13991251626449683],
+                    [-0.7070447097001022, -0.689239614562717, 0.15822936580336597],
+                    [-0.009368989583632227, -0.8402726226234002, -0.5420831501751135],
+                    [-0.009368990308466175, 0.5421569119847954, -0.8402250322429763],
+                    [-0.6976757201164692, 0.15103300806068373, 0.7003125159784791],
+                    [-0.7164137000085679, -0.14708270257792092, -0.6819956664396106],
+                ]
+            )
+        else:
+            points = super().get_basis_vectors()
+        return points
+
     def construct_header(
-        self, filename: Path = None,
+        self,
+        filename: Path = None,
         n_dims: int = 3,
         b_values: list | np.ndarray | tuple = (0, 1000),
     ) -> list:
