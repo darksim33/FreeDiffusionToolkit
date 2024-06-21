@@ -95,7 +95,7 @@ class BasicSiemensTool(FreeDiffusionTool):
         head.append(
             r"# -----------------------------------------------------------------------------"
         )
-        head.append(f"[directions={n_directions}]")
+        head.append(f"[directions={n_directions}*{b_values}]")
 
         coordinate_system = self.options.get("CoordinateSystem", "xyz")
         head.append(f"CoordinateSystem = {coordinate_system}")
