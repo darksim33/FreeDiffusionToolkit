@@ -36,7 +36,7 @@ def run(
     elif len(args) < 5:
         args.append((Path.home().resolve() / "DiffusionVectors.txt").__str__())
 
-    b_values = [int(val) for val in args[1].replace(",", " ").split()]
+    b_values = [float(val) for val in args[1].replace(",", " ").split()]
     n_dims = int(args[2])
     vendor = args[3]
     filename = Path(args[4])
