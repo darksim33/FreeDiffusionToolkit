@@ -95,7 +95,8 @@ class BasicSiemensTool(FreeDiffusionTool):
         head.append(
             r"# -----------------------------------------------------------------------------"
         )
-        head.append(f"[directions={n_directions}*{b_values}]")
+        # Calculate the correct number of directions
+        head.append(f"[directions={n_directions * len(b_values)}]")
 
         coordinate_system = self.options.get("CoordinateSystem", "xyz")
         head.append(f"CoordinateSystem = {coordinate_system}")
@@ -217,7 +218,7 @@ class LegacySiemensTool(BasicSiemensTool):
                 Normalisation: str = "maximum", "none"
                     Normalisation mode used by the scaner (?)
                 Comment: str
-                    Further information and comments about the diffusion vector file.
+                    Further information und comments about the diffusion vector file.
                 Newline: str = "\r\n" for legacy
 
         """
