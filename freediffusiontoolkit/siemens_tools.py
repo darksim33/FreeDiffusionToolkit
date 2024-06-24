@@ -45,22 +45,22 @@ class BasicSiemensTool(FreeDiffusionTool):
     def construct_header(
         self,
         filename: Path = None,
-        n_dims: int = 3,
-        b_values: list | np.ndarray | tuple = (0, 1000),
+        # n_dims: int = 3,
+        # b_values: list | np.ndarray | tuple = (0, 1000),
     ) -> list:
         """
         Create a header string for the diffusion vector file.
 
         Parameters
-        n_dims: int
-            Number of diffusion vector directions.
-        b_values: list | np.ndarray
-            An array containing the b values used for the diffusion vector file.
+        # n_dims: int
+        #     Number of diffusion vector directions.
+        # b_values: list | np.ndarray
+        #     An array containing the b values used for the diffusion vector file.
         kwargs: dict
             Options are explained in parent method documentation.
         """
         # This is the total number of applied dimensions
-        n_directions = len(b_values) * n_dims
+        n_directions = len(self.b_values) * self.n_dims
 
         head = list()
         head.append(
@@ -86,8 +86,8 @@ class BasicSiemensTool(FreeDiffusionTool):
             "description", "Vector file for Siemens 'free' diffusion mode."
         )
         head.append(f"# Description: {description}")
-        head.append(f"b-values: {b_values}")
-        head.append(f"number dimensions: {n_dims}")
+        head.append(f"b-values: {self.b_values}")
+        head.append(f"number dimensions: {self.n_dims}")
         comment = self.options.get("Comment", None)
         if comment:
             head.append(f"Comment: {comment}")
@@ -96,7 +96,7 @@ class BasicSiemensTool(FreeDiffusionTool):
             r"# -----------------------------------------------------------------------------"
         )
         # Calculate the correct number of directions
-        head.append(f"[directions={n_directions * len(b_values)}]")
+        head.append(f"[directions={n_directions}]")
 
         coordinate_system = self.options.get("CoordinateSystem", "xyz")
         head.append(f"CoordinateSystem = {coordinate_system}")
