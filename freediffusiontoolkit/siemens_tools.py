@@ -86,8 +86,8 @@ class BasicSiemensTool(FreeDiffusionTool):
             "description", "Vector file for Siemens 'free' diffusion mode."
         )
         head.append(f"# Description: {description}")
-        head.append(f"b-values: {self.b_values}")
-        head.append(f"number dimensions: {self.n_dims}")
+        head.append(f"# b-values: {self.b_values}")
+        head.append(f"# number dimensions: {self.n_dims}")
         comment = self.options.get("Comment", None)
         if comment:
             head.append(f"Comment: {comment}")
