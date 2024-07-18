@@ -117,6 +117,7 @@ class BasicSiemensTool(FreeDiffusionTool):
         filename: Path
             Pathlib Path to the diffusion vector file.
 
+        old:
         options: dict
             Several options to modify the header information.
                 Description: str
@@ -136,21 +137,6 @@ class BasicSiemensTool(FreeDiffusionTool):
         diffusion_vectors = self.get_diffusion_vectors()
 
         self.write(filename, header, diffusion_vectors)
-
-    def write(
-        self, filename: Path, header: list, diffusion_vectors: list | np.ndarray
-    ) -> None:
-        with filename.open("w") as file:
-            # write header to file
-            for line in header:
-                file.write(line + self.options.get("newline", "\n"))
-
-            # write values to file
-            for row_idx, row in enumerate(diffusion_vectors):
-                file.write(
-                    self.vector_to_string(row_idx, row)
-                    + self.options.get("newline", "\n")
-                )
 
     @staticmethod
     def vector_to_string(

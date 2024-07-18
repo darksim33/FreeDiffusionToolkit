@@ -50,6 +50,29 @@ def test_basic_save(free_diffusion_tool_siemens_basic, vector_filename_siemens_b
     assert vector_filename_siemens_basic.is_file()
 
 
+def test_basic_scale_image(
+    free_diffusion_tool_siemens_basic, vector_filename_siemens_basic
+):
+    free_diffusion_tool_siemens_basic.scale_by_value = (
+        free_diffusion_tool_siemens_basic.b_values[-5]
+    )
+
+    vectors = free_diffusion_tool_siemens_basic.get_diffusion_vectors(
+        scale_by_value=free_diffusion_tool_siemens_basic.scale_by_value
+    )
+    assert (
+        np.sqrt(
+            np.power(vectors[-1][0], 2)
+            + np.power(vectors[-1][1], 2)
+            + np.power(vectors[-1][2], 2)
+        )
+        > 1
+    )
+
+    free_diffusion_tool_siemens_basic.save(vector_filename_siemens_basic)
+    assert vector_filename_siemens_basic.is_file()
+
+
 def test_basic_load(vector_file_siemens_basic, free_diffusion_tool_siemens_basic):
     free_diffusion_tool_siemens_basic.load(vector_file_siemens_basic)
 

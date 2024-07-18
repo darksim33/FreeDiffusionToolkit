@@ -16,6 +16,7 @@ class FreeDiffusionTool:
         self.b_values = b_values
         self.n_dims = n_dims
         self.vectors = None
+        self.scale_by_value = kwargs.get("scale_by_value", None)
 
     @property
     def vectors(self):
@@ -42,8 +43,14 @@ class FreeDiffusionTool:
 
         return points
 
-    def get_diffusion_vectors(self) -> np.ndarray:
-        """Calculate the diffusion vectors for the given number of dimensions and b_values."""
+    def get_diffusion_vectors(self, scale_by_value: int | None = None) -> np.ndarray:
+        """
+        Calculate the diffusion vectors for the given number of dimensions and b_values.
+
+        Parameters:
+            scale_by_value: int
+                Select b_value for scaling the vector file if you don't want to use the highest.
+        """
         diffusion_vectors = np.array([])
 
         vectors = self.get_basis_vectors()
@@ -51,7 +58,10 @@ class FreeDiffusionTool:
         for b_value in self.b_values:
 
             # Apply b_values to vector file as relative length
-            scaling = b_value / self.b_values[-1]
+            if not scale_by_value:
+                scaling = b_value / self.b_values[-1]
+            else:
+                scaling = b_value / scale_by_value
 
             if diffusion_vectors.size:
                 diffusion_vectors = np.concatenate(
@@ -63,8 +73,33 @@ class FreeDiffusionTool:
         return diffusion_vectors
 
     @abstractmethod
-    def save(self, diffusion_vector_file: Path) -> None:
+    def construct_header(self, filename: Path):
         pass
+
+    def write(
+        self, filename: Path, header: list, diffusion_vectors: list | np.ndarray
+    ) -> None:
+        with filename.open("w") as file:
+            # write header to file
+            for line in header:
+                file.write(line + self.options.get("newline", "\n"))
+
+            # write values to file
+            for row_idx, row in enumerate(diffusion_vectors):
+                file.write(
+                    self.vector_to_string(row_idx, row)
+                    + self.options.get("newline", "\n")
+                )
+
+    def save(self, filename: Path) -> None:
+        # get Header
+        header = self.construct_header(filename=filename)
+        # get diffusion values
+        diffusion_vectors = self.get_diffusion_vectors(
+            scale_by_value=self.scale_by_value
+        )
+        # save to file
+        self.write(filename, header, diffusion_vectors)
 
     @abstractmethod
     def load(self, diffusion_vector_file: Path) -> None:
