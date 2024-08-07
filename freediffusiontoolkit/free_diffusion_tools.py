@@ -16,7 +16,7 @@ class FreeDiffusionTool:
         self.b_values = b_values
         self.n_dims = n_dims
         self.vectors = None
-        self.scale_by_value = kwargs.get("scale_by_value", None)
+        self._scale_by_value = kwargs.get("scale_by_value", None)
 
     @property
     def vectors(self):
@@ -27,6 +27,14 @@ class FreeDiffusionTool:
     @vectors.setter
     def vectors(self, vectors: np.ndarray):
         self._vectors = vectors
+
+    @property
+    def scale_by_value(self):
+        return self._scale_by_value
+
+    @scale_by_value.setter
+    def scale_by_value(self, value):
+        self._scale_by_value = value
 
     def get_basis_vectors(self) -> np.ndarray:
         """Calculate Basis vectors according to qspace from E. Caruyer"""
@@ -51,6 +59,9 @@ class FreeDiffusionTool:
             scale_by_value: int
                 Select b_value for scaling the vector file if you don't want to use the highest.
         """
+        if scale_by_value is None:
+            scale_by_value = self._scale_by_value
+
         diffusion_vectors = np.array([])
 
         vectors = self.get_basis_vectors()
